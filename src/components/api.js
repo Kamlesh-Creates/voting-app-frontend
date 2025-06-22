@@ -3,9 +3,8 @@ import axios from 'axios';
 
 
 const API = axios.create({
-  baseURL: 'http://192.168.1.8:5000', //backend url
+  baseURL: process.env.REACT_APP_BACKEND_URL,
 });
-
 
 
 API.interceptors.request.use((config) => {
