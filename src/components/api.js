@@ -55,7 +55,7 @@ export const deletecandidate = (id) => API.delete(`/candidate/deletecandidate/${
 export const fetchtokenverify=()=> API.get('/verify');
 
 export const fetchVoteStatusByElection = (electionId) => {
-  return API.get(`/vote/status/${electionId}`);
+  return API.get(`/votestatus/status/${electionId}`);
 };
 
 export const fetchelection=()=>API.get('/election/current')
