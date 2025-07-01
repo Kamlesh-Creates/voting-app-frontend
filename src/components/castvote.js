@@ -26,15 +26,10 @@ function Castvote() {
   const fetchCurrentElection = async () => {
     try {
       const res = await fetchelection();
-      console.log("Election fetched from API:", res.data);
-
-      if (!res.data || !res.data._id) {
-        toast.error("Election response malformed.");
-        return;
-      }
+      
       setCurrentElection(res.data);
       setCurrentElectionId(res.data._id);
-
+console.log(res.data._id)
       const voteStatusRes = await fetchVoteStatusByElection(res.data._id);
       setHasVotedInCurrentElection(voteStatusRes.data.hasVoted);
     } catch (error) {
