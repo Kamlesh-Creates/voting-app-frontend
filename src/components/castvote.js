@@ -10,7 +10,8 @@ import { toast } from "react-toastify";
 function Castvote() {
   const [votelist, setvotelist] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [hasVotedInCurrentElection, setHasVotedInCurrentElection] = useState(false);
+  const [hasVotedInCurrentElection, setHasVotedInCurrentElection] =
+    useState(false);
   const [currentElectionId, setCurrentElectionId] = useState(null);
   const [currentElection, setCurrentElection] = useState(null);
 
@@ -25,6 +26,12 @@ function Castvote() {
   const fetchCurrentElection = async () => {
     try {
       const res = await fetchelection();
+      console.log("Election fetched from API:", res.data);
+
+      if (!res.data || !res.data._id) {
+        toast.error("Election response malformed.");
+        return;
+      }
       setCurrentElection(res.data);
       setCurrentElectionId(res.data._id);
 
@@ -41,7 +48,6 @@ function Castvote() {
     }
   };
 
-  
   useEffect(() => {
     if (currentElection && !toastShownRef.current) {
       toast.success("Election Activated You Can Vote!");
@@ -71,7 +77,9 @@ function Castvote() {
       const response = await voteForCandidate(candidateId, currentElectionId);
       if (response.status === 200 || response.status === 201) {
         toast.success("Vote Added Successfully!");
-        const voteStatusRes = await fetchVoteStatusByElection(currentElectionId);
+        const voteStatusRes = await fetchVoteStatusByElection(
+          currentElectionId
+        );
         setHasVotedInCurrentElection(voteStatusRes.data.hasVoted);
       }
     } catch (error) {
@@ -117,10 +125,17 @@ function Castvote() {
                       <td style={{ fontSize: "20px" }}>{index + 1}</td>
                       <td>
                         <img
-                          src={candidate.photoURL || "https://via.placeholder.com/60"}
+                          src={
+                            candidate.photoURL ||
+                            "https://via.placeholder.com/60"
+                          }
                           alt="candidate"
                           className="img-thumbnail mx-auto d-block"
-                          style={{ width: "150px", height: "140px", objectFit: "cover" }}
+                          style={{
+                            width: "150px",
+                            height: "140px",
+                            objectFit: "cover",
+                          }}
                         />
                       </td>
                       <td style={{ fontSize: "18px" }}>{candidate.name}</td>
@@ -141,7 +156,11 @@ function Castvote() {
                         <button
                           className="btn btn-success"
                           onClick={() => handlevote(candidate._id)}
-                          disabled={!currentElection || hasVotedInCurrentElection || loading}
+                          disabled={
+                            !currentElection ||
+                            hasVotedInCurrentElection ||
+                            loading
+                          }
                         >
                           {!currentElection
                             ? "Election Not Active"
